@@ -36,7 +36,41 @@ def calcShannonEntroy(dataset):
 
     return entroy
 
+def splitDataset(dataset, feature, value):
+    reds = []
+    for row in dataset:
+        if row[feature] == value:
+            tmp = row[:feature]
+            tmp.extend(row[feature:])
+            reds.append(tmp)
+
+    return reds
+
+def getBestFeature(dataset):
+    featureNum = len(dataset[0]) - 1
+    baseEntropy = calcShannonEntroy(dataset)
+    bestFeature = 0
+    maxInfoGain = 0
+    for i in range(featureNum):
+        featureValueList = [rows[i] for rows in dataset]
+        featureValues = set(featureValueList)
+        conditionalEntropy = 0.0
+        for featurevalue in featureValues:
+            ds = splitDataset(dataset, i, featurevalue)
+            prob = float(len(ds)) / len(dataset)
+            conditionalEntropy += prob * calcShannonEntroy(ds)
+
+        infoGain = baseEntropy - conditionalEntropy
+        print('特征%d的信息增益为：%f' % (i, infoGain))
+        if maxInfoGain < infoGain:
+            maxInfoGain = infoGain
+            bestFeature = i
+
+    return bestFeature
+
 
 if __name__ == '__main__':
     ds, labels = createDataSet()
-    print(calcShannonEntroy(ds))
+    #print(calcShannonEntroy(ds))
+    i = getBestFeature(ds)
+    print('最有特征索引值为：%d' % i)
