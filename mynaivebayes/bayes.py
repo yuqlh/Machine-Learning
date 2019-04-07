@@ -48,7 +48,7 @@ def trainNB(trainmatix, traincategory):
 def classifyNB(vec2classify, p0vec, p1vec, pclass):
     p1 = sum(vec2classify * p1vec) + np.log(pclass)
     p0 = sum(vec2classify * p0vec) + np.log(1-pclass)
-    print('p0=%f, p1=%f' % (p0, p1))
+    #print('p0=%f, p1=%f' % (p0, p1))
     if p1 > p0:
         return 1
     else:
